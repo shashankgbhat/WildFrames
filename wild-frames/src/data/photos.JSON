@@ -1,0 +1,76 @@
+{
+  "photos": [
+    {
+      "id": 1,
+      "title": "Misty Mountain Peak",
+      "species": "Landscape Photography",
+      "description": "Early morning mist rolling over the mountain peaks, creating an ethereal atmosphere.",
+      "location": "Western Ghats, Karnataka",
+      "region": "Western Ghats",
+      "style": "Landscape",
+      "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "featured": true
+    },
+    {
+      "id": 2,
+      "title": "Kingfisher in Action",
+      "species": "Alcedo atthis",
+      "description": "A common kingfisher captured mid-dive, showcasing its incredible hunting precision.",
+      "location": "Kabini River, Karnataka",
+      "region": "Southern India",
+      "style": "Wildlife",
+      "imageUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "featured": true
+    },
+    {
+      "id": 3,
+      "title": "Forest Canopy",
+      "species": "Tropical Rainforest",
+      "description": "Looking up through the dense canopy of a tropical rainforest, rays of light filtering through.",
+      "location": "Agumbe, Karnataka",
+      "region": "Western Ghats",
+      "style": "Landscape",
+      "imageUrl": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "featured": true
+    },
+    {
+      "id": 4,
+      "title": "Sunset Silhouette",
+      "species": "Golden Hour Photography",
+      "description": "A lone tree silhouetted against the vibrant colors of a setting sun.",
+      "location": "Hampi, Karnataka",
+      "region": "Central Karnataka",
+      "style": "Landscape",
+      "imageUrl": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=2574&q=80",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "featured": true
+    },
+    {
+      "id": 5,
+      "title": "Mountain Reflection",
+      "species": "Alpine Lake",
+      "description": "Perfect mirror reflection of snow-capped peaks in a pristine alpine lake.",
+      "location": "Kashmir Valley",
+      "region": "Himalayas",
+      "style": "Landscape",
+      "imageUrl": "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "featured": false
+    },
+    {
+      "id": 6,
+      "title": "Peacock Display",
+      "species": "Pavo cristatus",
+      "description": "A magnificent peacock in full display, showing off its iridescent plumage.",
+      "location": "Keoladeo National Park, Rajasthan",
+      "region": "Northern India",
+      "style": "Wildlife",
+      "imageUrl": "https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2274&q=80",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "featured": false
+    }
+  ]
+}
