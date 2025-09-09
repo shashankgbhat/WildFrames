@@ -1,13 +1,194 @@
-@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+@import 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
 
-/* Custom styles */
-.dark {
+/* Dark mode setup */
+html.dark {
   color-scheme: dark;
 }
 
 /* Smooth transitions */
 * {
-  transition: color 0.3s ease, background-color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Light mode (default) */
+body {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* Dark mode background and text */
+html.dark body {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+/* Header styles */
+header {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-color: #e5e7eb;
+}
+
+html.dark header {
+  background-color: rgba(17, 24, 39, 0.9);
+  border-color: #374151;
+}
+
+/* Navigation links */
+.nav-link {
+  color: #374151;
+}
+
+.nav-link:hover {
+  color: #111827;
+}
+
+html.dark .nav-link {
+  color: #d1d5db;
+}
+
+html.dark .nav-link:hover {
+  color: #f9fafb;
+}
+
+/* Active navigation link */
+.nav-link.active {
+  color: #059669;
+  border-color: #059669;
+}
+
+html.dark .nav-link.active {
+  color: #34d399;
+  border-color: #34d399;
+}
+
+/* Logo/Brand */
+.brand {
+  color: #111827;
+}
+
+.brand:hover {
+  color: #059669;
+}
+
+html.dark .brand {
+  color: #f9fafb;
+}
+
+html.dark .brand:hover {
+  color: #34d399;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.theme-toggle:hover {
+  background-color: #e5e7eb;
+}
+
+html.dark .theme-toggle {
+  background-color: #374151;
+  color: #d1d5db;
+}
+
+html.dark .theme-toggle:hover {
+  background-color: #4b5563;
+}
+
+/* Mobile menu button */
+.mobile-menu-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+html.dark .mobile-menu-btn {
+  background-color: #374151;
+  color: #d1d5db;
+}
+
+/* Hero section */
+.hero-bg {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #e0f2fe 100%);
+}
+
+html.dark .hero-bg {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #374151 100%);
+}
+
+/* Hero text */
+.hero-title {
+  color: #111827;
+}
+
+.hero-subtitle {
+  color: #6b7280;
+}
+
+html.dark .hero-title {
+  color: #f9fafb;
+}
+
+html.dark .hero-subtitle {
+  color: #d1d5db;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #047857;
+}
+
+.btn-secondary {
+  border-color: #059669;
+  color: #059669;
+}
+
+.btn-secondary:hover {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+html.dark .btn-secondary {
+  border-color: #34d399;
+  color: #34d399;
+}
+
+html.dark .btn-secondary:hover {
+  background-color: #34d399;
+  color: #111827;
+}
+
+/* Page backgrounds */
+.page-bg {
+  background-color: #ffffff;
+}
+
+html.dark .page-bg {
+  background-color: #111827;
+}
+
+/* Page titles */
+.page-title {
+  color: #111827;
+}
+
+html.dark .page-title {
+  color: #f9fafb;
+}
+
+/* Page text */
+.page-text {
+  color: #6b7280;
+}
+
+html.dark .page-text {
+  color: #d1d5db;
 }
 
 /* Custom scrollbar */
@@ -16,26 +197,65 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #94a3b8;
 }
 
-.dark ::-webkit-scrollbar-track {
-  background: #2d3748;
+html.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #4a5568;
+html.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #718096;
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Focus styles */
+*:focus {
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
+}
+
+/* Backdrop blur */
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Ensure proper layout */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
