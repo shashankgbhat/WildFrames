@@ -1,157 +1,130 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import photosData from '../data/photos.json';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const featuredPhotos = photosData.photos.filter(photo => photo.featured);
+  const featuredPhotos = useMemo(
+    () => photosData.photos.filter((photo) => photo.featured),
+    []
+  );
+  const reportPhotos = useMemo(() => photosData.photos.slice(0, 4), []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (!featuredPhotos.length) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % featuredPhotos.length);
-    }, 5000); // Change slide every 5 seconds
-    return () => clearInterval(interval);
+    }, 5600);
+
+    return () => window.clearInterval(intervalId);
   }, [featuredPhotos.length]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % featuredPhotos.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + featuredPhotos.length) % featuredPhotos.length);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
-
-  if (featuredPhotos.length === 0) {
-    // Fallback if no photos are loaded
+  if (!featuredPhotos.length) {
     return (
-      <div className="min-h-screen hero-bg flex items-center justify-center">
-        <div className="text-center px-6 max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 hero-title">
-            Wild<span className="text-green-600">Frames</span>
-          </h1>
-          <p className="text-xl md:text-2xl hero-subtitle mb-8">
-            Capturing Nature's Wild Beauty
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 rounded-lg font-semibold btn-primary transition-colors">
-              Explore Gallery
-            </button>
-            <button className="px-8 py-4 border-2 rounded-lg font-semibold btn-secondary transition-colors">
-              Read Stories
-            </button>
-          </div>
+      <section className="page-shell page-shell--tight">
+        <div className="empty-state">
+          <p className="section-kicker">WildFrames</p>
+          <h1>No featured photographs are available yet.</h1>
+          <p>Add entries to the photo collection to bring the homepage to life.</p>
         </div>
-      </div>
+      </section>
     );
   }
 
+  const currentPhoto = featuredPhotos[currentSlide];
+
   return (
-    <section className="relative h-screen overflow-hidden">
-      {/* Carousel Background */}
-      <div className="absolute inset-0">
-        {featuredPhotos.map((photo, index) => (
-          <div
-            key={photo.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img
-              src={photo.imageUrl}
-              alt={photo.title}
-              className="w-full h-full object-cover"
-              style={{ objectPosition: 'center' }}
-            />
-            {/* Dark overlay for better text readability */}
-            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-          </div>
-        ))}
-      </div>
+    <div className="home-page">
+      <section className="reference-hero">
+        <div className="reference-hero__media">
+          {featuredPhotos.map((photo, index) => (
+            <figure
+              key={photo.id}
+              className={`reference-hero__frame ${index === currentSlide ? 'is-visible' : ''}`}
+            >
+              <img src={photo.imageUrl} alt={photo.title} className="reference-hero__image" />
+            </figure>
+          ))}
+          <div className="reference-hero__overlay" />
+        </div>
 
-      {/* Content Overlay */}
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="text-center text-white px-6 max-w-5xl">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
-            Capturing Nature's
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">
-              Wild Beauty
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl lg:text-3xl mb-8 text-gray-200 leading-relaxed max-w-4xl mx-auto">
-            Welcome to my photographic journey through India's incredible wildlife and landscapes. 
-            Each frame tells a story of conservation, wonder, and the delicate balance of our natural world.
+        <div className="page-shell reference-hero__content">
+          <p className="section-kicker">Wildlife Photography Journal</p>
+          <h1>Field encounters, wild spaces, and a darker natural atmosphere.</h1>
+          <p className="reference-hero__copy">
+            A portfolio of reptiles, birds, and natural history moments photographed across
+            India with the calmer editorial mood of a trip report.
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="px-10 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
-              Explore Gallery
-            </button>
-            <button className="px-10 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
-              Read Stories
-            </button>
-          </div>
-          
-          {/* Current photo info */}
-          <div className="mt-12 text-center">
-            <p className="text-lg font-medium mb-2">{featuredPhotos[currentSlide]?.title}</p>
-            <p className="text-sm text-gray-300">{featuredPhotos[currentSlide]?.location}</p>
+          <div className="hero-actions">
+            <Link to="/gallery" className="button button--primary">
+              Gallery
+            </Link>
+            <Link to="/blog" className="button button--ghost">
+              Stories
+            </Link>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 p-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
-        aria-label="Previous image"
-      >
-        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 p-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
-        aria-label="Next image"
-      >
-        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+      <section className="page-shell reference-intro">
+        <div>
+          <p className="section-kicker">Introduction</p>
+          <h2>A wildlife portfolio shaped like a trip report instead of a typical gallery.</h2>
+        </div>
+        <div className="reference-intro__copy">
+          <p>
+            The layout now follows a more report-like rhythm: long horizontal images,
+            measured text blocks, subdued borders, and a dark natural palette that lets the
+            photographs lead.
+          </p>
+          <p>
+            This gives you a strong base now, while still leaving room to add richer
+            gallery features later.
+          </p>
+        </div>
+      </section>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
-        {featuredPhotos.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide 
-                ? 'bg-white scale-125' 
-                : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 right-8 z-20 hidden md:block">
-        <div className="flex flex-col items-center text-white text-opacity-70">
-          <span className="text-sm mb-3 writing-mode-vertical transform rotate-90 origin-center">SCROLL</span>
-          <div className="w-px h-16 bg-white bg-opacity-50 relative">
-            <div className="absolute bottom-0 w-px h-8 bg-white animate-pulse"></div>
+      <section className="page-shell report-preview">
+        <div className="report-preview__header">
+          <p className="section-kicker">Featured Report</p>
+          <h2>{currentPhoto.title}</h2>
+          <p>{currentPhoto.description}</p>
+          <div className="report-preview__meta">
+            <span>{currentPhoto.species}</span>
+            <span>{currentPhoto.location}</span>
           </div>
         </div>
-      </div>
 
-      {/* Photo credit */}
-      <div className="absolute top-20 right-6 z-20 text-white text-opacity-60 text-sm hidden md:block">
-        <p>{featuredPhotos[currentSlide]?.description}</p>
-      </div>
-    </section>
+        <div className="report-preview__stack">
+          {reportPhotos.map((photo) => (
+            <article key={photo.id} className="report-photo">
+              <img src={photo.imageUrl} alt={photo.title} />
+              <div className="report-photo__caption">
+                <p>{photo.title}</p>
+                <span>{photo.species}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="page-shell journey-banner">
+        <div className="journey-banner__content">
+          <p className="section-kicker">Browse More</p>
+          <h2>More photographs will slot naturally into this same image-led rhythm.</h2>
+          <p>
+            As you add more work later, the gallery can grow like an expedition archive
+            rather than a card wall.
+          </p>
+        </div>
+        <Link to="/gallery" className="button button--secondary">
+          View Archive
+        </Link>
+      </section>
+    </div>
   );
 };
 
