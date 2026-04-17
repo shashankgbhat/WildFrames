@@ -24,6 +24,9 @@ yarn-error.log*
 
 # Vite
 /dist
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 
 # Superpowers visual companion
 .superpowers/
