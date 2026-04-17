@@ -1,19 +1,38 @@
-import React from 'react';
+import { motion } from 'framer-motion';
+import { pageVariants, sectionVariants } from '../lib/motionVariants';
 
-const About = () => {
+function About() {
   return (
-    <section className="page-shell page-shell--top">
+    <motion.section
+      className="page-shell page-shell--top"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <div className="about-layout">
-        <div className="page-intro">
+        <motion.div
+          className="page-intro"
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+        >
           <p className="section-kicker">About</p>
           <h1>A wildlife photographer building a slower, more atmospheric archive.</h1>
           <p>
             WildFrames is shaped around close observation, habitat awareness, and a visual
             language that lets wildlife feel rooted in place rather than isolated from it.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="about-card">
+        <motion.div
+          className="about-card"
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+        >
           <h2>The approach</h2>
           <p>
             The photographs here are meant to feel grounded and generous. That means natural
@@ -25,9 +44,15 @@ const About = () => {
             earthy color, and typography that feels more like a field publication than a
             software template.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="detail-list detail-list--about">
+        <motion.div
+          className="detail-list detail-list--about"
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+        >
           <div>
             <span>Base region</span>
             <strong>Karnataka, India</strong>
@@ -40,10 +65,10 @@ const About = () => {
             <span>Creative intention</span>
             <strong>To make people feel calmer, more curious, and more protective of wild spaces</strong>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
-};
+}
 
 export default About;
