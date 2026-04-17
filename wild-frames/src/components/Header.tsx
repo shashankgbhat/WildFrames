@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import type { NavItem } from '../types';
 
-const navItems = [
-  { path: '/', label: 'Home' },
+const navItems: NavItem[] = [
+  { path: '/',        label: 'Home' },
   { path: '/gallery', label: 'Gallery' },
-  { path: '/blog', label: 'Field Notes' },
-  { path: '/about', label: 'About' }
+  { path: '/blog',    label: 'Field Notes' },
+  { path: '/about',   label: 'About' },
 ];
 
-const Header = () => {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -47,6 +48,4 @@ const Header = () => {
       </nav>
     </header>
   );
-};
-
-export default Header;
+}
