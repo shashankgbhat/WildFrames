@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import photosData from '../data/photos.json';
 
+const featuredPhotos = photosData.photos.filter((photo) => photo.featured);
+const reportPhotos = photosData.photos.slice(0, 4);
+
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const featuredPhotos = useMemo(
-    () => photosData.photos.filter((photo) => photo.featured),
-    []
-  );
-  const reportPhotos = useMemo(() => photosData.photos.slice(0, 4), []);
 
   useEffect(() => {
     if (!featuredPhotos.length) {
@@ -20,7 +18,7 @@ const Hero = () => {
     }, 5600);
 
     return () => window.clearInterval(intervalId);
-  }, [featuredPhotos.length]);
+  }, []);
 
   if (!featuredPhotos.length) {
     return (

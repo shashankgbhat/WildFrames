@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import photosData from '../data/photos.json';
 
 const rowPatterns = [
@@ -8,40 +8,46 @@ const rowPatterns = [
   { rowClass: 'trip-gallery__row trip-gallery__row--feature-right', count: 3, itemClasses: ['trip-gallery__item', 'trip-gallery__item', 'trip-gallery__item trip-gallery__item--feature'] }
 ];
 
+const photos = photosData.photos;
+
+const galleryRows = (() => {
+  const rows = [];
+  let photoIndex = 0;
+  let patternIndex = 0;
+
+  while (photoIndex < photos.length) {
+    const pattern = rowPatterns[patternIndex % rowPatterns.length];
+    const slice = photos.slice(photoIndex, photoIndex + pattern.count);
+    const adjustedClass =
+      slice.length === 1
+        ? 'trip-gallery__row trip-gallery__row--single'
+        : slice.length === 2
+          ? 'trip-gallery__row trip-gallery__row--double'
+          : pattern.rowClass;
+
+    rows.push({
+      rowClass: adjustedClass,
+      photos: slice.map((photo, i) => ({ ...photo, globalIndex: photoIndex + i })),
+      itemClasses: pattern.itemClasses
+    });
+
+    photoIndex += slice.length;
+    patternIndex += 1;
+  }
+
+  return rows;
+})();
+
 const Gallery = () => {
-  const photos = useMemo(() => photosData.photos, []);
   const [activeIndex, setActiveIndex] = useState(null);
-  const photoIndexById = useMemo(
-    () => new Map(photos.map((photo, index) => [photo.id, index])),
-    [photos]
-  );
-  const galleryRows = useMemo(() => {
-    const rows = [];
-    let photoIndex = 0;
-    let patternIndex = 0;
 
-    while (photoIndex < photos.length) {
-      const pattern = rowPatterns[patternIndex % rowPatterns.length];
-      const slice = photos.slice(photoIndex, photoIndex + pattern.count);
-      const adjustedClass =
-        slice.length === 1
-          ? 'trip-gallery__row trip-gallery__row--single'
-          : slice.length === 2
-            ? 'trip-gallery__row trip-gallery__row--double'
-            : pattern.rowClass;
+  const showPrevious = useCallback(() => {
+    setActiveIndex((current) => (current - 1 + photos.length) % photos.length);
+  }, []);
 
-      rows.push({
-        rowClass: adjustedClass,
-        photos: slice,
-        itemClasses: pattern.itemClasses
-      });
-
-      photoIndex += slice.length;
-      patternIndex += 1;
-    }
-
-    return rows;
-  }, [photos]);
+  const showNext = useCallback(() => {
+    setActiveIndex((current) => (current + 1) % photos.length);
+  }, []);
 
   useEffect(() => {
     if (activeIndex === null) {
@@ -49,17 +55,9 @@ const Gallery = () => {
     }
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        setActiveIndex(null);
-      }
-
-      if (event.key === 'ArrowRight') {
-        setActiveIndex((current) => (current + 1) % photos.length);
-      }
-
-      if (event.key === 'ArrowLeft') {
-        setActiveIndex((current) => (current - 1 + photos.length) % photos.length);
-      }
+      if (event.key === 'Escape') setActiveIndex(null);
+      if (event.key === 'ArrowRight') showNext();
+      if (event.key === 'ArrowLeft') showPrevious();
     };
 
     const previousOverflow = document.body.style.overflow;
@@ -70,17 +68,9 @@ const Gallery = () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [activeIndex, photos.length]);
+  }, [activeIndex, showNext, showPrevious]);
 
   const activePhoto = activeIndex !== null ? photos[activeIndex] : null;
-
-  const showPrevious = () => {
-    setActiveIndex((current) => (current - 1 + photos.length) % photos.length);
-  };
-
-  const showNext = () => {
-    setActiveIndex((current) => (current + 1) % photos.length);
-  };
 
   return (
     <section className="page-shell page-shell--top">
@@ -95,23 +85,19 @@ const Gallery = () => {
 
       <div className="gallery-bleed">
         <div className="trip-gallery trip-gallery--rows">
-          {galleryRows.map((row, rowIndex) => (
-            <div key={`row-${rowIndex}`} className={row.rowClass}>
-              {row.photos.map((photo, itemIndex) => {
-                const photoIndex = photoIndexById.get(photo.id);
-
-                return (
-                  <button
-                    key={photo.id}
-                    type="button"
-                    className={row.itemClasses[itemIndex] || 'trip-gallery__item'}
-                    onClick={() => setActiveIndex(photoIndex)}
-                    aria-label={`Open ${photo.title}`}
-                  >
-                    <img src={photo.imageUrl} alt={photo.title} />
-                  </button>
-                );
-              })}
+          {galleryRows.map((row) => (
+            <div key={row.photos[0].id} className={row.rowClass}>
+              {row.photos.map((photo, itemIndex) => (
+                <button
+                  key={photo.id}
+                  type="button"
+                  className={row.itemClasses[itemIndex] || 'trip-gallery__item'}
+                  onClick={() => setActiveIndex(photo.globalIndex)}
+                  aria-label={`Open ${photo.title}`}
+                >
+                  <img src={photo.imageUrl} alt={photo.title} />
+                </button>
+              ))}
             </div>
           ))}
         </div>
