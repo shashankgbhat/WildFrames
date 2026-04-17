@@ -1,23 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import photosData from '../data/photos.json';
+import type { Photo } from '../types';
+import {
+  pageVariants,
+  sectionVariants,
+  containerVariants,
+  childVariants,
+} from '../lib/motionVariants';
 
-const featuredPhotos = photosData.photos.filter((photo) => photo.featured);
-const reportPhotos = photosData.photos.slice(0, 4);
+const photos = (photosData as { photos: Photo[] }).photos;
+const featuredPhotos = photos.filter((p) => p.featured);
+const reportPhotos = photos.slice(0, 4);
 
-const Hero = () => {
+export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    if (!featuredPhotos.length) {
-      return undefined;
-    }
-
-    const intervalId = window.setInterval(() => {
+    if (!featuredPhotos.length) return undefined;
+    const id = window.setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % featuredPhotos.length);
     }, 5600);
-
-    return () => window.clearInterval(intervalId);
+    return () => window.clearInterval(id);
   }, []);
 
   if (!featuredPhotos.length) {
@@ -35,7 +40,13 @@ const Hero = () => {
   const currentPhoto = featuredPhotos[currentSlide];
 
   return (
-    <div className="home-page">
+    <motion.div
+      className="home-page"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <section className="reference-hero">
         <div className="reference-hero__media">
           {featuredPhotos.map((photo, index) => (
@@ -43,7 +54,16 @@ const Hero = () => {
               key={photo.id}
               className={`reference-hero__frame ${index === currentSlide ? 'is-visible' : ''}`}
             >
-              <img src={photo.imageUrl} alt={photo.title} className="reference-hero__image" />
+              <motion.img
+                key={index === currentSlide ? `active-${currentSlide}` : photo.id}
+                src={photo.imageUrl}
+                alt={photo.title}
+                className="reference-hero__image"
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                initial={{ scale: 1.0 }}
+                animate={index === currentSlide ? { scale: 1.08 } : { scale: 1.0 }}
+                transition={{ duration: 6, ease: 'easeOut' }}
+              />
             </figure>
           ))}
           <div className="reference-hero__overlay" />
@@ -57,17 +77,19 @@ const Hero = () => {
             India with the calmer editorial mood of a trip report.
           </p>
           <div className="hero-actions">
-            <Link to="/gallery" className="button button--primary">
-              Gallery
-            </Link>
-            <Link to="/blog" className="button button--ghost">
-              Stories
-            </Link>
+            <Link to="/gallery" className="button button--primary">Gallery</Link>
+            <Link to="/blog"    className="button button--ghost">Stories</Link>
           </div>
         </div>
       </section>
 
-      <section className="page-shell reference-intro">
+      <motion.section
+        className="page-shell reference-intro"
+        variants={sectionVariants}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         <div>
           <p className="section-kicker">Introduction</p>
           <h2>A wildlife portfolio shaped like a trip report instead of a typical gallery.</h2>
@@ -83,9 +105,15 @@ const Hero = () => {
             gallery features later.
           </p>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="page-shell report-preview">
+      <motion.section
+        className="page-shell report-preview"
+        variants={sectionVariants}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         <div className="report-preview__header">
           <p className="section-kicker">Featured Report</p>
           <h2>{currentPhoto.title}</h2>
@@ -96,20 +124,32 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="report-preview__stack">
+        <motion.div
+          className="report-preview__stack"
+          variants={containerVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+        >
           {reportPhotos.map((photo) => (
-            <article key={photo.id} className="report-photo">
+            <motion.article key={photo.id} className="report-photo" variants={childVariants}>
               <img src={photo.imageUrl} alt={photo.title} />
               <div className="report-photo__caption">
                 <p>{photo.title}</p>
                 <span>{photo.species}</span>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      <section className="page-shell journey-banner">
+      <motion.section
+        className="page-shell journey-banner"
+        variants={sectionVariants}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         <div className="journey-banner__content">
           <p className="section-kicker">Browse More</p>
           <h2>More photographs will slot naturally into this same image-led rhythm.</h2>
@@ -118,12 +158,8 @@ const Hero = () => {
             rather than a card wall.
           </p>
         </div>
-        <Link to="/gallery" className="button button--secondary">
-          View Archive
-        </Link>
-      </section>
-    </div>
+        <Link to="/gallery" className="button button--secondary">View Archive</Link>
+      </motion.section>
+    </motion.div>
   );
-};
-
-export default Hero;
+}
